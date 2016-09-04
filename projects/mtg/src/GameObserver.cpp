@@ -641,8 +641,8 @@ void GameObserver::gameStateBasedEffects()
         if (players[d]->snowManaW < 0)
             players[d]->snowManaW = 0;
 
-        MTGGameZone * dzones[] = { players[d]->game->inPlay, players[d]->game->graveyard, players[d]->game->hand, players[d]->game->library, players[d]->game->exile };
-        for (int k = 0; k < 5; k++)
+        MTGGameZone * dzones[] = { players[d]->game->inPlay, players[d]->game->graveyard, players[d]->game->hand, players[d]->game->library, players[d]->game->exile, players[d]->game->stack };
+        for (int k = 0; k < 6; k++)
         {
             MTGGameZone * zone = dzones[k];
             if (mLayers->stackLayer()->count(0, NOT_RESOLVED) == 0)
@@ -930,7 +930,10 @@ void GameObserver::gameStateBasedEffects()
         MTGGameZone * z = players[i]->game->inPlay;
         int nbcards = z->nb_cards;
         //------------------------------
-        p->nomaxhandsize = (z->hasAbility(Constants::NOMAXHAND));
+        if(z->hasAbility(Constants::NOMAXHAND)||p->opponent()->inPlay()->hasAbility(Constants::OPPNOMAXHAND))
+            p->nomaxhandsize = true;
+        else
+            p->nomaxhandsize = false;
 
         /////////////////////////////////////////////////
         //handle end of turn effects while we're at it.//
