@@ -2489,11 +2489,11 @@ MTGAbility * AbilityFactory::parseMagicLine(string s, int id, Spell * spell, MTG
             sabilities.append(",");
             sabilities.append(tokenParameters[i]);
         }
-        if(sabilities.find(",tnum:") != string::npos)
+        if(sabilities.find(",tnum.") != string::npos)
         {
-            size_t begins = sabilities.find(",tnum:");
+            size_t begins = sabilities.find(",tnum.");
             cID = sabilities.substr(begins+6);
-            sabilities = cReplaceString(sabilities,",tnum:"+cID,"");
+            sabilities = cReplaceString(sabilities,",tnum."+cID,"");
         }
         int value = 0;
         if (spt.find("xx/xx") != string::npos)
@@ -2593,11 +2593,11 @@ MTGAbility * AbilityFactory::parseMagicLine(string s, int id, Spell * spell, MTG
             sabilities.append(",");
             sabilities.append(tokenParameters[i]);
         }
-        if(sabilities.find(",tnum:") != string::npos)
+        if(sabilities.find(",tnum.") != string::npos)
         {
-            size_t begins = sabilities.find(",tnum:");
+            size_t begins = sabilities.find(",tnum.");
             cID = sabilities.substr(begins+6);
-            sabilities = cReplaceString(sabilities,",tnum:"+cID,"");
+            sabilities = cReplaceString(sabilities,",tnum."+cID,"");
         }
         int value = 0;
         if (spt.find("xx/xx") != string::npos)
@@ -3903,10 +3903,11 @@ MTGAbility * AbilityFactory::parseMagicLine(string s, int id, Spell * spell, MTG
         return a;
     }
 
+    //steal target until source leaves battlefield
     found = s.find("steal");
     if (found != string::npos)
     {
-        MTGAbility * a = NEW AInstantControlSteal(observer, id, card, target);
+        MTGAbility * a = NEW ASeizeWrapper(observer, id, card, target);
         a->oneShot = 1;
         return a;
     }
